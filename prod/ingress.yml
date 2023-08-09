@@ -9,7 +9,7 @@ metadata:
 
 
 
-  name: my-django-app-service
+  name: django-app
   namespace: django-app
 spec:
   rules:
@@ -18,7 +18,7 @@ spec:
       paths:
       - backend:
           service:
-            name: my-django-app-service
+            name: django-app
             port:
               number: 80
         pathType: ImplementationSpecific
