@@ -13,7 +13,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: my-django-app-container
-  replicas: 4
+  replicas: 1
   template:
     metadata:
       labels:
