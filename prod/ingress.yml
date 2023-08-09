@@ -18,7 +18,7 @@ spec:
       paths:
       - backend:
           service:
-            name: my-django-app
+            name: my-django-app-service
             port:
               number: 80
         pathType: ImplementationSpecific
