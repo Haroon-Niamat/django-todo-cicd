@@ -14,7 +14,7 @@ spec:
            pathType: Prefix
            backend:
             service:
-              name: django-app
+              name: django-app-service
               port:
                 number: 8000
 
