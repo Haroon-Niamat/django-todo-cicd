@@ -16,5 +16,5 @@ spec:
             service:
               name: django-app
               port:
-                number: 30004
+                number: 8000
 
