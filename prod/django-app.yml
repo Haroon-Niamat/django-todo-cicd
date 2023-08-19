@@ -32,7 +32,7 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: django-app
-  name: django-app-service
+  name: django-app
 spec:
   selector:
       app.kubernetes.io/name: django-app
