@@ -36,14 +36,16 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       
-      - name: Set up SSH key
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.EC2_PUBLIC_IP}}
+            USER_NAME: ${{secrets.USER_NAME}}
+      
         run: |
-          mkdir -p ~/.ssh
-          sudo echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          sudo chmod 600 ~/.ssh/id_rsa
-          sudo ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-      - name: SSH into EC2 and Run Script
-        run: |
-          sudo ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_PUBLIC_IP }} 'sudo bash deploy.sh'
+              # Now we have got the access of EC2 and we will start the deploy .
+              cd /home/ubuntu/ && bash deploy.sh '
           
