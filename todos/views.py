@@ -8,7 +8,7 @@ class IndexView(generic.ListView):
     context_object_name = 'todo_list'
 
     def get_queryset(self):
-        """Return all the latest todos."""
+        """Return all the latest todos hi there."""
         return Todo.objects.order_by('-created_at')
 
 def add(request):
