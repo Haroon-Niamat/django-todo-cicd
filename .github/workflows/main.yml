@@ -24,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: haroonniamat029/hamza
+          images: haroonniamat029/notes
           tags: |
             type=semver,pattern={{version}}
       
