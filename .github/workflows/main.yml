@@ -24,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: haroonniamat029/notes
+          images: haroonniamat029/django-app
           tags: |
             type=semver,pattern={{version}}
       
