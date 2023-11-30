@@ -44,7 +44,7 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${EC2_PUBLIC_IP} '
               # Now we have got the access of EC2 and we will start the deploy .
-              cd /home/ec2-user/nodejs && docker-compose pull && docker-compose up -d '
+              docker-compose pull && docker-compose up -d '
           
