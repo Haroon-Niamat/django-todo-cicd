@@ -47,55 +47,34 @@
 #               # Now we have got the access of EC2 and we will start the deploy .
 #               docker-compose pull && docker-compose up -d '
 
-name: Docker Image CI
+
+
+
+name: CI/CD.
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - dev
 
 jobs:
-  push_to_registry_and_deploy:
-    name: Build and Push Docker image to Docker Hub and deploy on EC2
-    runs-on: self-hosted
+  build_and_deploy:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+     
 
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: haroonniamat029/django-app
-          tags: |
-            type=semver,pattern={{version}}
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+    - name: Run Script on the Server
+      uses: appleboy/ssh-action@v1.0.2      
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}  
+        script: |
+            docker-compose up -d
 
-      - name: Deploy to EC2
-        env:
-          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOSTNAME: ${{ secrets.EC2_PUBLIC_IP }}
-          USER_NAME: ${{ secrets.USER_NAME }}
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-              # Now we have got access to the EC2 and will start the deployment.
-              
-              docker-compose pull && docker-compose up -d'
-
-          
